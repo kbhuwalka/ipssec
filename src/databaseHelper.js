@@ -1,16 +1,6 @@
 'use strict';
 
-//MongoDb middleware
-var mongoose = require('mongoose');
-var Signals = require('./models/schema.js');
-
-mongoose.connect('mongodb://localhost/ips', function(error){
-  if(error){
-    console.log("Failed to connect to the MongoDb database.");
-  } else {
-    console.log("Successfuly established connection to the database.");
-  }
-});
+var db = require('./databaseConnection.js');
 
 /**
   *Read the objects from the database based on the
@@ -18,5 +8,33 @@ mongoose.connect('mongodb://localhost/ips', function(error){
   *return the objects that match the filters.
   */
 function read(filters){
+  if("bssid" in filters){
+
+  }
+}
+
+/**
+  *Store the objects into the database.
+  *The function first checks if a reference point with the given Id exists
+  *and updates the values for the particular BSSID, otherwise
+  *it inserts a new object.
+  */
+
+function insert(signal){
+  db.connection.query(
+    "SELECT * FROM referencepoint",
+    function(err, rows, fields){
+      if(err)
+        console.log("Didn't read anything...");
+      else {
+        console.log("Read %s rows...", rows.lenght);
+        }
+    }
+  );
 
 }
+
+
+
+module.exports.read = read;
+module.exports.insert = insert;

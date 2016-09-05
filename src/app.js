@@ -1,5 +1,6 @@
 'use strict';
 
+var dbConn = require('./databaseConnection.js')
 require('./databaseHelper.js');
 
 var express = require("express");
@@ -9,15 +10,15 @@ var router = require("./router.js");
 var app = express();
 //Configure express to use body-parser as middleware to handle POST requests
 
-app.post("/store", function(request, response){
-  router.storeData(request.body);
+app.get("/store", function(request, response){
+  router.storeData(request.query);
   //End the response
-  response.end();
+  response.send("Received");
 });
 
 app.get("/retrieve", function(request, response){
   var data = router.getData(request.query);
-  response.status(data["status"]);
+  //response.status(data["status"]);
   response.json(data);
 });
 

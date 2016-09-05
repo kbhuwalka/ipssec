@@ -22,7 +22,7 @@ function storeData(params){
   *whether the data is valid for the database schema or not
   */
 function validatePostData(data){
-  return false;
+  return true;
 }
 
 /**
@@ -33,9 +33,9 @@ function validatePostData(data){
   */
 function getData(params){
   var rawValues = dbHelper.read(params);
-  var calculatedValues = locationFinder.calculate(rawValues);
+  //var calculatedValues = locationFinder.calculate(rawValues);
 
-  return calculatedValues;
+  return rawValues;
 }
 
 //EXPORTS
