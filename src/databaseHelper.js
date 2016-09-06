@@ -23,14 +23,16 @@ function initRawData(){
   *return the objects that match the filters.
   */
 function read(query){
+  var data = [];
   db.connection.query(query)
     .on("error", function(err){
       console.log("Couldn't read data.");
       console.error(err);
     })
     .on("result", function(row){
-      //TODO Parse data
+      data.push(row);
     });
+    return data;
 }
 
 /**
