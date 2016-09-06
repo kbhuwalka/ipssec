@@ -22,7 +22,16 @@ function storeData(params){
   *whether the data is valid for the database schema or not
   */
 function validatePostData(data){
-  return true;
+  if(data.bssid && data.rssi && data.referencePointId){
+      var isBssidOfProperLength = (data.bssid.length == 17);
+      var isRssiNegative = (data.rssi < 0);
+      var isReferencePointPositive = (data.referencePointId > 0);
+
+      if(isBssidOfProperLength && isRssiNegative && isReferencePointPositive)
+        return true;
+  }
+  console.log("Incorrect query parameters.");
+  return false;
 }
 
 /**
@@ -32,10 +41,12 @@ function validatePostData(data){
   *The function returns a JSON object containing the calculated values.
   */
 function getData(params){
-  var rawValues = dbHelper.read(params);
+  //var rawValues = dbHelper.read(params);
   //var calculatedValues = locationFinder.calculate(rawValues);
 
-  return rawValues;
+  dbHelper.read();
+
+  //return rawValues;
 }
 
 //EXPORTS
