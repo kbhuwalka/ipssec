@@ -7,7 +7,6 @@ var util = require('util');
 var rawDataJsonObjects = [];
 var rawDataReferenceIds = [];
 
-
 /**
   *This function caches the raw_data table onto the server
   *CAUTION: Potential a very process-intensive task
@@ -165,3 +164,8 @@ function insertRawData(data){
 
 module.exports.read = readAllReferencePoints;
 module.exports.insert = insert;
+
+//Exports for raw data
+module.exports.init = init;
+module.exports.rawDataJsonObjects = rawDataJsonObjects;
+module.exports.rawDataReferenceIds = rawDataReferenceIds;
