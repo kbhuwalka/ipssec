@@ -166,6 +166,6 @@ module.exports.read = readAllReferencePoints;
 module.exports.insert = insert;
 
 //Exports for raw data
-module.exports.init = init;
+module.exports.initRawData = initRawData;
 module.exports.rawDataJsonObjects = rawDataJsonObjects;
 module.exports.rawDataReferenceIds = rawDataReferenceIds;
