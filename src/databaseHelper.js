@@ -6,6 +6,8 @@ var util = require('util');
 //The data cache which is set up through the init method
 var rawDataJsonObjects = [];
 var rawDataReferenceIds = [];
+var isDataTransferComplete = false;
+var rawDataLength = 0;
 
 /**
   *This function caches the raw_data table onto the server
@@ -14,6 +16,8 @@ var rawDataReferenceIds = [];
 function initRawData(){
   //Currently this acts as a convinience function allowing future modifications
   readRawData();
+  rawDataLength = rawDataReferenceIds.length;
+  isDataTransferComplete = true;
 }
 
 /**
@@ -30,8 +34,15 @@ function read(query){
     })
     .on("result", function(row){
       data.push(row);
+    })
+    .on("end", function(){
+      return data;
     });
+
+    console.log(data);
+
     return data;
+
 }
 
 /**
@@ -41,8 +52,14 @@ function read(query){
 function readAllReferencePoints(){
   var readQuery = "SELECT DISTINCT referenceId FROM dirtydata";
   var result = read(readQuery);
-    //TODO: Parse the result and return an array
-    console.dir(result);
+
+  var referencePoints = [];
+  result.forEach(function(row){
+    referencePoints.push(row.referenceId);
+  });
+
+    console.dir(referencePoints);
+    return referencePoints;
 }
 
 /**
@@ -52,8 +69,14 @@ function readAllReferencePoints(){
 function readAllBssids(){
     var readQuery = "SELECT DISTINCT bssid FROM dirtydata";
     var result = read(readQuery);
-      //TODO: Parse the result and return an array
-      console.dir(result);
+
+    var bssids = [];
+    result.forEach(function(row){
+      bssids.push(row.bssid);
+    });
+
+    console.dir(bssids);
+    return bssids;
 }
 
   /**
@@ -94,6 +117,11 @@ function readAverageRssiForBssidAndReferencePoint(bssid, referenceId){
   var result = read(readQuery);
   //TODO: Parse the result and return an array
   console.dir(result);
+  if(result = undefined)
+    return 0;
+  else {
+    return result;
+  }
 }
 
 /**
@@ -120,7 +148,7 @@ function readRawData(){
   *it inserts a new object.
   */
 function insert(signal){
-  var insertQuery = "INSERT INTO `dirtydata` (`referenecId`,`bssid`, `rssi`, `time`) VALUES (%s,'%s', %s, CURRENT_TIMESTAMP)";
+  var insertQuery = "INSERT INTO `dirtydata` (`referenceId`,`bssid`, `rssi`, `time`) VALUES (%s,'%s', %s, CURRENT_TIMESTAMP)";
 
   var referenceId = signal.referencePointId;
   var bssid = signal.bssid;
@@ -142,12 +170,12 @@ function insert(signal){
   *into the database without parsing anything
   */
 function insertRawData(data){
-  var insertQuery = "INSERT INTO `raw_data` (`referenecId`, `data`, `time`) VALUES (%s,'%s', CURRENT_TIMESTAMP)";
+  var insertQuery = "INSERT INTO `raw_data` (`referenceId`, `data`, `time`) VALUES (%s,'%s', CURRENT_TIMESTAMP)";
 
-  var referenecId = data.referenecId;
+  var referenceId = data.referenceId;
   var jsonString = data.data;
 
-  insertQuery = util.format(insertQuery, referenecId, jsonString);
+  insertQuery = util.format(insertQuery, referenceId, jsonString);
 
   db.connection.query(insertQuery, function(err, result){
     if(err){
@@ -162,10 +190,15 @@ function insertRawData(data){
 
 
 
-module.exports.read = readAllReferencePoints;
+module.exports.readAllReferencePoints = readAllReferencePoints;
+module.exports.readAllBssids = readAllBssids;
+module.exports.readAverageRssiForBssidAndReferencePoint = readAverageRssiForBssidAndReferencePoint;
 module.exports.insert = insert;
 
 //Exports for raw data
+module.exports.insertRawData = insertRawData;
 module.exports.initRawData = initRawData;
 module.exports.rawDataJsonObjects = rawDataJsonObjects;
 module.exports.rawDataReferenceIds = rawDataReferenceIds;
+module.exports.isDataTransferComplete = isDataTransferComplete;
+module.exports.rawDataLength = rawDataLength;

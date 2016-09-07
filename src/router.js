@@ -10,11 +10,12 @@ var locationFinder = require("./locationFinder.js");
   */
 function storeData(params){
   console.log("Received a POST request from a client.");
-  if(validatePostData(params)){
-    dbHelper.insert(params);
-  } else {
-    //TODO:Return a JSON response indicating the error
-  }
+  dbHelper.insertRawData(params);
+  // if(validatePostData(params)){
+  //
+  // } else {
+  //   //TODO:Return a JSON response indicating the error
+  // }
 };
 
 /**
@@ -40,13 +41,8 @@ function validatePostData(data){
   *and then calculate the location.
   *The function returns a JSON object containing the calculated values.
   */
-function getData(params){
-  //var rawValues = dbHelper.read(params);
-  //var calculatedValues = locationFinder.calculate(rawValues);
-
-  dbHelper.read();
-
-  //return rawValues;
+function getData(data){
+  
 }
 
 //EXPORTS
